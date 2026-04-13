@@ -772,6 +772,7 @@
 
       if (st === 'connected') {
         callBtn.classList.add('active');
+        callBtn.disabled = false;
         callIcon.className = 'fas fa-phone-slash';
         muteBtn.disabled = false;
         textInput.classList.add('visible');
