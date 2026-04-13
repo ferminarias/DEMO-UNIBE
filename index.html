@@ -931,11 +931,11 @@
       sessionAlive = false;
       try {
         if (voiceSession) {
-          voiceSession.endSession?.();
-          voiceSession.disconnect?.();
+          voiceSession.endSession();
           voiceSession = null;
         }
       } catch (e) { console.error('[voice] stop error:', e); }
+      // Cortar tracks del micrófono a nivel del navegador
       if (mediaStream) {
         mediaStream.getTracks().forEach(t => t.stop());
         mediaStream = null;
@@ -951,8 +951,15 @@
       if (!voiceSession) return;
       isMuted = !isMuted;
       try {
-        voiceSession.conversation?.setMicMuted(isMuted);
-      } catch (e) { console.error('[voice] mute error:', e); }
+        // voiceSession es directamente la instancia de Conversation
+        voiceSession.setMicMuted(isMuted);
+      } catch (e) {
+        // Fallback: silenciar a nivel del track de audio del navegador
+        console.warn('[voice] setMicMuted no disponible, usando track fallback:', e);
+        if (mediaStream) {
+          mediaStream.getAudioTracks().forEach(t => { t.enabled = !isMuted; });
+        }
+      }
       updateMuteBtn();
     }
 
