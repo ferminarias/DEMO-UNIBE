@@ -988,23 +988,24 @@
 
       if (!voiceSession) return;
 
-      // Intentar enviar vía SDK
+      // voiceSession ES la instancia de Conversation directamente
       try {
-        if (typeof voiceSession.conversation?.sendUserMessage === 'function') {
-          voiceSession.conversation.sendUserActivity?.();
-          voiceSession.conversation.sendUserMessage(text);
-          return;
-        }
-      } catch (e) { console.error('[voice] sendUserMessage error:', e); }
+        voiceSession.sendUserActivity?.();
+        voiceSession.sendUserMessage(text);
+        console.log('[voice] text sent:', text);
+        return;
+      } catch (e) {
+        console.error('[voice] sendUserMessage error:', e);
+      }
 
-      // Fallback WebSocket
+      // Fallback: buscar el WebSocket interno por posibles nombres de propiedad
       try {
-        const ws = voiceSession._ws || voiceSession.conversation?._ws;
+        const ws = voiceSession.socket || voiceSession.ws || voiceSession._socket;
         if (ws && ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify({ type: 'user_message', text }));
-          return;
+          console.log('[voice] text sent via ws fallback');
         }
-      } catch (e) { console.error('[voice] ws send error:', e); }
+      } catch (e) { console.error('[voice] ws fallback error:', e); }
     }
 
     // Enviar texto con Enter
