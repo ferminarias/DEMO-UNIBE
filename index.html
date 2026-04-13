@@ -921,7 +921,8 @@
       } catch (e) {
         console.error('[voice] SDK error:', e);
         setStatus('error', 'Error');
-        addMessage('No se pudo iniciar la conversación por voz. Verifica tu Agent ID y vuelve a intentar.', 'assistant');
+        const msg = e?.message || e?.toString() || 'Error desconocido';
+        addMessage('Error al conectar: ' + msg, 'assistant');
       }
     }
 
