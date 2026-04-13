@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>UNIBE - Universidad Iberoamericana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Lato', sans-serif; color: #4a4a4a; background: #fff; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 15px; }
+
+    /* HEADER */
+    .header { background: #0054a6; }
+    .menuSuperTop {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 30px;
+    }
+    .navbar-brand img { height: 55px; }
+    .navTopRight { display: flex; align-items: center; gap: 15px; }
+    .ctaPreAdmisiones {
+      background: #fff; color: #0054a6; border-radius: 20px;
+      padding: 5px 25px; font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s;
+    }
+    .ctaPreAdmisiones:hover { background: #00a3e1; color: #fff; }
+    .redesTop { list-style: none; display: flex; gap: 8px; align-items: center; }
+    .redesTop li a {
+      color: #fff; font-size: 14px; width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; transition: opacity 0.3s;
+    }
+    .redesTop li a:hover { opacity: 0.7; }
+    .dropdownLinks { display: flex; gap: 12px; align-items: center; }
+    .dropdownLinks .dropdown { position: relative; }
+    .dropdownLinks .dropdown-toggle {
+      color: #fff; font-size: 12px; background: none; border: none;
+      cursor: pointer; padding: 4px 8px;
+    }
+    .dropdownLinks .dropdown-toggle:hover { opacity: 0.8; }
+    .dropdownLinks .dropdown-menu {
+      display: none; position: absolute; top: 100%; left: 0;
+      background: #fff; min-width: 180px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 4px; z-index: 1000; padding: 5px 0;
+    }
+    .dropdownLinks .dropdown:hover .dropdown-menu { display: block; }
+    .dropdownLinks .dropdown-menu a {
+      display: block; padding: 6px 15px; color: #333; font-size: 12px; transition: background 0.2s;
+    }
+    .dropdownLinks .dropdown-menu a:hover { background: #f5f5f5; }
+    .search-icon { color: #fff; font-size: 16px; cursor: pointer; margin-left: 5px; }
+
+    /* NAVBAR */
+    .navbar-unibe {
+      background: #ddd; display: flex; align-items: center;
+      justify-content: center; padding: 0; height: 50px;
+    }
+    .navbar-nav { list-style: none; display: flex; align-items: center; gap: 0; }
+    .navbar-nav li { position: relative; }
+    .navbar-nav li a {
+      display: block; padding: 14px 18px; color: #4a4a4a;
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      transition: all 0.3s; letter-spacing: 0.3px;
+    }
+    .navbar-nav li a:hover { color: #0054a6; background: rgba(0,84,166,0.08); }
+    .navbar-nav li .sub-menu {
+      display: none; position: absolute; top: 100%; left: 0;
+      background: #fff; min-width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 0 0 4px 4px; z-index: 1000;
+    }
+    .navbar-nav li:hover .sub-menu { display: block; }
+    .navbar-nav li .sub-menu a {
+      padding: 10px 20px; font-size: 12px; text-transform: none;
+      font-weight: 400; border-bottom: 1px solid #f0f0f0;
+    }
+    .navbar-nav .school-medicine a { color: #0054a6; font-weight: 900; }
+
+    /* HERO SLIDER */
+    .mainSlider { position: relative; overflow: hidden; height: 550px; background: #001a33; }
+    .slider-track { display: flex; transition: transform 0.6s ease; height: 100%; }
+    .slide { min-width: 100%; height: 100%; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .slider-dots {
+      position: absolute; bottom: 20px; left: 50%;
+      transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;
+    }
+    .slider-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(255,255,255,0.5); cursor: pointer; border: none; transition: background 0.3s;
+    }
+    .slider-dot.active { background: #fff; }
+    .slider-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.3); color: #fff; border: none;
+      width: 50px; height: 50px; font-size: 20px; cursor: pointer; z-index: 10; transition: background 0.3s;
+    }
+    .slider-arrow:hover { background: rgba(0,0,0,0.6); }
+    .slider-arrow.prev { left: 15px; }
+    .slider-arrow.next { right: 15px; }
+
+    /* SECTION TITLES */
+    .h2Title {
+      text-align: center; font-size: 16px; font-weight: 700;
+      text-transform: uppercase; color: #0054a6; margin: 35px 0 20px; letter-spacing: 1px;
+    }
+    .h2Title::after {
+      content: ''; display: block; width: 50px; height: 3px;
+      background: #0054a6; margin: 8px auto 0;
+    }
+
+    /* NEWS */
+    .newsSection { padding: 10px 0 30px; }
+    .newsGrid { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 10px; }
+    .newsGrid::-webkit-scrollbar { height: 4px; }
+    .newsGrid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+    .newsCard {
+      min-width: 260px; flex: 0 0 260px; background: #fff; border-radius: 4px;
+      overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .newsCard:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .newsCard img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .newsCard .cardBody { padding: 15px; }
+    .newsCard h4 { font-size: 14px; color: #333; margin-bottom: 10px; line-height: 1.4; font-weight: 700; }
+    .newsCard .readMore { color: #0054a6; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .newsNav { display: flex; justify-content: space-between; margin-top: 15px; }
+    .newsNav button {
+      background: #0054a6; color: #fff; border: none;
+      width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 14px; transition: background 0.3s;
+    }
+    .newsNav button:hover { background: #003d7a; }
+
+    /* EVENTS */
+    .wrapEvents { background: #0054a6; padding: 40px 0; color: #fff; }
+    .wrapEvents h2 {
+      color: #fff; font-size: 16px; text-transform: uppercase;
+      font-weight: 700; letter-spacing: 1px; margin-bottom: 25px; text-align: center;
+    }
+    .wrapEvents h2::after { content: ''; display: block; width: 50px; height: 3px; background: #fff; margin: 8px auto 0; }
+    .eventsGrid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .eventCard {
+      display: flex; background: rgba(255,255,255,0.1); border-radius: 4px;
+      overflow: hidden; min-width: 300px; transition: background 0.3s;
+    }
+    .eventCard:hover { background: rgba(255,255,255,0.18); }
+    .eventDate {
+      background: #003d7a; padding: 15px 20px; text-align: center;
+      display: flex; flex-direction: column; justify-content: center; min-width: 80px;
+    }
+    .eventDate .day { font-size: 24px; font-weight: 900; }
+    .eventDate .month { font-size: 12px; text-transform: uppercase; }
+    .eventContent { padding: 15px 20px; display: flex; align-items: center; }
+    .eventContent h5 { font-size: 14px; font-weight: 700; line-height: 1.4; }
+
+    /* OFERTA */
+    .ofertaTabs { display: flex; justify-content: center; gap: 0; margin-bottom: 25px; }
+    .ofertaTabs button {
+      padding: 10px 35px; border: 2px solid #0054a6; background: #fff;
+      color: #0054a6; font-weight: 700; font-size: 13px; cursor: pointer; text-transform: uppercase; transition: all 0.3s;
+    }
+    .ofertaTabs button:first-child { border-radius: 4px 0 0 4px; }
+    .ofertaTabs button:last-child { border-radius: 0 4px 4px 0; }
+    .ofertaTabs button.active { background: #0054a6; color: #fff; }
+    .ofertaGrid { display: flex; gap: 20px; overflow-x: auto; padding: 0 0 30px; }
+    .ofertaCard {
+      min-width: 260px; flex: 0 0 260px; position: relative; border-radius: 4px;
+      overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s;
+    }
+    .ofertaCard:hover { transform: translateY(-3px); }
+    .ofertaCard img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .ofertaCard .overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,84,166,0.9));
+      padding: 40px 15px 15px; color: #fff;
+    }
+    .ofertaCard .overlay h4 { font-size: 13px; font-weight: 700; line-height: 1.3; }
+
+    /* TOUR VIRTUAL */
+    .wrapTourVirtual {
+      background: linear-gradient(rgba(0,84,166,0.8), rgba(0,84,166,0.85)),
+        url('https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2019/01/tour-virtual-unibe.jpg&w=1400&q=60') center/cover no-repeat;
+      position: relative; padding: 80px 0; color: #fff; text-align: center;
+    }
+    .wrapTourVirtual .content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+    .wrapTourVirtual .btn-agenda {
+      display: inline-block; background: transparent; color: #fff;
+      border: 2px solid #fff; padding: 8px 25px; border-radius: 20px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; transition: all 0.3s;
+    }
+    .wrapTourVirtual .btn-agenda:hover { background: #fff; color: #0054a6; }
+    .wrapTourVirtual h3 { font-size: 28px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+    .wrapTourVirtual p { font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+    .wrapTourVirtual .btn-conoce {
+      display: inline-block; background: #00a3e1; color: #fff;
+      padding: 10px 30px; border-radius: 20px; font-size: 13px; font-weight: 700; transition: background 0.3s;
+    }
+    .wrapTourVirtual .btn-conoce:hover { background: #0088c0; }
+
+    /* MOVILIDAD */
+    .wrapMovilidad { padding: 50px 0; text-align: center; background: #fbfbfb; }
+    .wrapMovilidad h4 { font-size: 22px; font-weight: 700; color: #0054a6; margin-bottom: 10px; }
+    .wrapMovilidad p { font-size: 14px; color: #666; max-width: 700px; margin: 0 auto 25px; line-height: 1.6; }
+    .mapPlaceholder {
+      max-width: 900px; margin: 0 auto; height: 400px;
+      background: #e8f4f8; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; color: #0054a6;
+    }
+
+    /* PLATAFORMAS */
+    .wrapPlataformas { padding: 20px 0 40px; }
+    .plataformasGrid {
+      display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; padding: 10px 0;
+    }
+    .platLogo { font-size: 22px; font-weight: 700; opacity: 0.5; transition: opacity 0.3s; }
+    .platLogo:hover { opacity: 1; }
+
+    /* FOOTER */
+    .footer { background: #fafafa; padding: 40px 0 0; border-top: 1px solid #e0e0e0; }
+    .footerGrid { display: flex; gap: 30px; padding-bottom: 30px; }
+    .footerCol { flex: 1; }
+    .footerCol .footer-logo { height: 45px; margin-bottom: 15px; }
+    .footerCol address { font-style: normal; font-size: 13px; line-height: 1.8; color: #666; }
+    .footerCol address a { color: #0054a6; }
+    .footerCol h5 { font-size: 14px; font-weight: 700; color: #0054a6; text-transform: uppercase; margin-bottom: 10px; }
+    .footerCol p { font-size: 13px; color: #666; line-height: 1.6; }
+    .footerCol .newsletter-form { display: flex; margin-top: 10px; }
+    .footerCol .newsletter-form input {
+      flex: 1; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; font-size: 13px; outline: none;
+    }
+    .footerCol .newsletter-form button {
+      background: #0054a6; color: #fff; border: none; padding: 8px 15px; border-radius: 0 4px 4px 0; cursor: pointer;
+    }
+    .footerLinks { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+    .footerLinks a { font-size: 12px; color: #666; transition: color 0.3s; }
+    .footerLinks a:hover { color: #0054a6; }
+    .underfooter { background: #0054a6; color: #fff; text-align: center; padding: 12px; font-size: 12px; }
+
+    /* VOICE WIDGET */
+    .voice-widget {
+      position: fixed; bottom: 25px; right: 25px; z-index: 9999;
+      width: 65px; height: 65px; border-radius: 50%;
+      background: linear-gradient(135deg, #0054a6, #00a3e1);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(0,84,166,0.4);
+      transition: all 0.3s; animation: pulse-glow 2s infinite;
+    }
+    .voice-widget:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(0,84,166,0.6); }
+    .voice-widget i { font-size: 26px; }
+    .voice-widget .tooltip {
+      position: absolute; bottom: 75px; right: 0;
+      background: #fff; color: #333; padding: 10px 16px; border-radius: 8px;
+      font-size: 13px; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      opacity: 0; transform: translateY(5px); transition: all 0.3s; pointer-events: none;
+    }
+    .voice-widget .tooltip::after {
+      content: ''; position: absolute; bottom: -6px; right: 25px;
+      width: 12px; height: 12px; background: #fff; transform: rotate(45deg);
+    }
+    .voice-widget:hover .tooltip { opacity: 1; transform: translateY(0); }
+
+    .voice-panel {
+      position: fixed; bottom: 100px; right: 25px; z-index: 9998;
+      width: 360px; background: #fff; border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;
+      display: none; animation: slideUp 0.3s ease;
+    }
+    .voice-panel.active { display: block; }
+    .voice-panel-header {
+      background: linear-gradient(135deg, #0054a6, #00a3e1);
+      color: #fff; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .voice-panel-header h4 { font-size: 15px; font-weight: 700; }
+    .voice-panel-header .close-btn {
+      background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; opacity: 0.8;
+    }
+    .voice-panel-header .close-btn:hover { opacity: 1; }
+    .voice-panel-body { padding: 25px 20px; text-align: center; }
+    .mic-area {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: linear-gradient(135deg, #0054a6, #00a3e1);
+      margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .mic-area.listening { animation: pulse-mic 1.5s infinite; }
+    .mic-area i { font-size: 32px; color: #fff; }
+    .status { font-size: 14px; color: #666; margin-bottom: 15px; }
+    .suggestions { text-align: left; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; }
+    .suggestions p { font-size: 12px; color: #999; margin-bottom: 8px; text-transform: uppercase; font-weight: 700; }
+    .chip {
+      display: inline-block; background: #f0f7ff; color: #0054a6;
+      padding: 6px 14px; border-radius: 20px; font-size: 12px;
+      margin: 3px 4px; cursor: pointer; transition: background 0.2s;
+    }
+    .chip:hover { background: #d8ecff; }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 4px 20px rgba(0,84,166,0.4); }
+      50% { box-shadow: 0 4px 30px rgba(0,84,166,0.6), 0 0 0 8px rgba(0,84,166,0.1); }
+    }
+    @keyframes pulse-mic {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,84,166,0.4); }
+      50% { box-shadow: 0 0 0 15px rgba(0,84,166,0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 992px) {
+      .navbar-nav li a { padding: 14px 10px; font-size: 11px; }
+    }
+    @media (max-width: 768px) {
+      .menuSuperTop { flex-direction: column; gap: 10px; }
+      .navTopRight { flex-wrap: wrap; justify-content: center; }
+      .navbar-unibe { display: none; }
+      .mainSlider { height: 300px; }
+      .eventsGrid { flex-direction: column; align-items: center; }
+      .footerGrid { flex-direction: column; }
+      .voice-panel { width: calc(100% - 30px); right: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="menuSuperTop">
+      <a href="#" class="navbar-brand">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/themes/unibe/assets/images/logo-white-new.png&w=300" alt="UNIBE">
+      </a>
+      <div class="navTopRight">
+        <a href="#" class="ctaPreAdmisiones">INICIA TU ADMISIÓN</a>
+        <ul class="redesTop">
+          <li><a href="#"><i class="fa-regular fa-calendar"></i></a></li>
+          <li><a href="#"><i class="fa-regular fa-envelope"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
+        </ul>
+        <div class="dropdownLinks">
+          <div class="dropdown">
+            <button class="dropdown-toggle">Unibe Virtual <i class="fas fa-caret-down"></i></button>
+            <div class="dropdown-menu">
+              <a href="#">Portal</a>
+              <a href="#">Sistema Académico</a>
+              <a href="#">BrightSpace</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button class="dropdown-toggle">Adultos <i class="fas fa-caret-down"></i></button>
+          </div>
+          <div class="dropdown">
+            <button class="dropdown-toggle">Estudiantes <i class="fas fa-caret-down"></i></button>
+          </div>
+          <div class="dropdown">
+            <button class="dropdown-toggle">Egresados <i class="fas fa-caret-down"></i></button>
+          </div>
+          <span class="search-icon"><i class="fas fa-search"></i></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar-unibe">
+    <ul class="navbar-nav">
+      <li class="school-medicine"><a href="#">School of Medicine</a></li>
+      <li>
+        <a href="#">Oferta académica <i class="fas fa-caret-down" style="font-size:10px;margin-left:3px;"></i></a>
+        <div class="sub-menu">
+          <a href="#">Postgrado</a><a href="#">Grado</a><a href="#">Educación Continua</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Escuelas <i class="fas fa-caret-down" style="font-size:10px;margin-left:3px;"></i></a>
+        <div class="sub-menu">
+          <a href="#">Escuela de Derecho</a><a href="#">Escuela de Ingeniería</a>
+          <a href="#">Escuela de Negocios</a><a href="#">Escuela de Comunicación</a>
+          <a href="#">Escuela de Odontología</a>
+        </div>
+      </li>
+      <li><a href="#">Emprendimiento</a></li>
+      <li><a href="#">Admisiones</a></li>
+      <li><a href="#">Investigación</a></li>
+      <li><a href="#">Vinculación e Internacionalización</a></li>
+      <li><a href="#">Sobre UNIBE</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO SLIDER -->
+  <div class="mainSlider" id="heroSlider">
+    <div class="slider-track" id="sliderTrack">
+      <div class="slide"><img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2025/08/admisiones-2026_BannerWeb-1600x600-1-1.jpg&w=1400&q=70" alt="Admisiones 2026"></div>
+      <div class="slide"><img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/03/llamado-a-graduacion_banner-web11.jpg&w=1400&q=70" alt="Graduación"></div>
+      <div class="slide"><img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/03/Campamentos_SP_BannerWeb-2048-x-768-1.jpg&w=1400&q=70" alt="Campamentos"></div>
+      <div class="slide"><img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2023/04/Banner-web.jpg.jpeg&w=1400&q=70" alt="UNIBE"></div>
+      <div class="slide"><img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/03/acreditacion-4_isotipos-color_banner-web-1-2.jpg&w=1400&q=70" alt="Acreditación"></div>
+    </div>
+    <button class="slider-arrow prev" onclick="moveSlider(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button class="slider-arrow next" onclick="moveSlider(1)"><i class="fas fa-chevron-right"></i></button>
+    <div class="slider-dots" id="sliderDots"></div>
+  </div>
+
+  <!-- NOTICIAS -->
+  <h2 class="h2Title">Noticias</h2>
+  <div class="container newsSection">
+    <div class="newsGrid" id="newsGrid">
+      <a href="#" class="newsCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/04/XXIII-Jornada-de-Prevencion-de-Abuso-Infantil-2-360x280.jpg&w=360&q=70" alt="Noticia">
+        <div class="cardBody">
+          <h4>XXIII Jornada de Prevención de Abuso Infantil</h4>
+          <span class="readMore">Leer más</span>
+        </div>
+      </a>
+      <a href="#" class="newsCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/04/DVC06562MercadeoMercadeo-360x280.jpg&w=360&q=70" alt="Noticia">
+        <div class="cardBody">
+          <h4>Conversatorio: Liderazgo y cambio social</h4>
+          <span class="readMore">Leer más</span>
+        </div>
+      </a>
+      <a href="#" class="newsCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/04/cibo-360x280.png&w=360&q=70" alt="Noticia">
+        <div class="cardBody">
+          <h4>Cibo imparte entrenamiento internacional</h4>
+          <span class="readMore">Leer más</span>
+        </div>
+      </a>
+      <a href="#" class="newsCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/04/DSC03429-360x280.jpg&w=360&q=70" alt="Noticia">
+        <div class="cardBody">
+          <h4>Cibo ofrece conferencia sobre salud dental</h4>
+          <span class="readMore">Leer más</span>
+        </div>
+      </a>
+      <a href="#" class="newsCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/04/HackConRD-2026-2-360x280.jpg&w=360&q=70" alt="Noticia">
+        <div class="cardBody">
+          <h4>HackConRD 2026: Innovación tecnológica</h4>
+          <span class="readMore">Leer más</span>
+        </div>
+      </a>
+      <a href="#" class="newsCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2026/03/UFFEST-2026-CINE-J-360x280.jpg&w=360&q=70" alt="Noticia">
+        <div class="cardBody">
+          <h4>UFFEST 2026: Festival de cine universitario</h4>
+          <span class="readMore">Leer más</span>
+        </div>
+      </a>
+    </div>
+    <div class="newsNav">
+      <button onclick="scrollNews(-1)"><i class="fas fa-chevron-left"></i></button>
+      <button onclick="scrollNews(1)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- EVENTOS -->
+  <section class="wrapEvents">
+    <h2>Eventos</h2>
+    <div class="container">
+      <div class="eventsGrid">
+        <a href="#" class="eventCard">
+          <div class="eventDate"><span class="day">14</span><span class="month">Sep</span></div>
+          <div class="eventContent"><h5>Foro "La Analítica en el mundo profesional"</h5></div>
+        </a>
+        <a href="#" class="eventCard">
+          <div class="eventDate"><span class="day">14</span><span class="month">Mar</span></div>
+          <div class="eventContent"><h5>Business Camp 2022</h5></div>
+        </a>
+        <a href="#" class="eventCard">
+          <div class="eventDate"><span class="day">20</span><span class="month">Abr</span></div>
+          <div class="eventContent"><h5>Vive La Experiencia 2026</h5></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFERTA ACADEMICA -->
+  <h2 class="h2Title">Oferta académica</h2>
+  <div class="container">
+    <div class="ofertaTabs">
+      <button class="active" onclick="this.classList.add('active');this.nextElementSibling.classList.remove('active')">Postgrado</button>
+      <button onclick="this.classList.add('active');this.previousElementSibling.classList.remove('active')">Grado</button>
+    </div>
+    <div class="ofertaGrid">
+      <a href="#" class="ofertaCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2024/09/Banner-web-site-constitucional-360x280.jpg&w=360&q=70" alt="Programa">
+        <div class="overlay"><h4>Maestría en Derecho Constitucional</h4></div>
+      </a>
+      <a href="#" class="ofertaCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2020/02/thumbnail_Banner-web-site-MBA-360x280.jpg&w=360&q=70" alt="Programa">
+        <div class="overlay"><h4>MBA, Maestría en Administración de Empresas</h4></div>
+      </a>
+      <a href="#" class="ofertaCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2019/08/Banner-web-site-MMCD-360x280.jpg&w=360&q=70" alt="Programa">
+        <div class="overlay"><h4>Maestría en Marketing y Comunicación Digital</h4></div>
+      </a>
+      <a href="#" class="ofertaCard">
+        <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/uploads/2020/02/thumbnail_Banner-web-site-MBA-360x280.jpg&w=360&q=70" alt="Programa">
+        <div class="overlay"><h4>Especialidad en Gestión de Proyectos</h4></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- TOUR VIRTUAL -->
+  <section class="wrapTourVirtual">
+    <div class="content">
+      <a href="#" class="btn-agenda">AGENDA VISITA</a>
+      <h3>Tour en Realidad Virtual</h3>
+      <p>Conoce el campus de Santo Domingo, recorriendo en una vista real 360 de nuestras modernas aulas, laboratorios, biblioteca, las distintas escuelas y centros, gimnasio y demás áreas de servicios.</p>
+      <a href="#" class="btn-conoce">Conoce UNIBE</a>
+    </div>
+  </section>
+
+  <!-- MOVILIDAD -->
+  <section class="wrapMovilidad">
+    <div class="container">
+      <h4>Movilidad estudiantil</h4>
+      <p>Descubre nuestras opciones de movilidad estudiantil internacional y atrévete a vivir experiencias académicas y culturales memorables.</p>
+      <div class="mapPlaceholder">
+        <div style="text-align:center;">
+          <i class="fas fa-globe-americas" style="font-size:80px;opacity:0.3;"></i>
+          <p style="margin-top:10px;opacity:0.6;">Mapa interactivo de movilidad</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATAFORMAS -->
+  <h2 class="h2Title">Nuestras Plataformas</h2>
+  <div class="container wrapPlataformas">
+    <div class="plataformasGrid">
+      <span class="platLogo" style="color:#4285f4;">Google</span>
+      <span class="platLogo" style="color:#f25022;">Microsoft</span>
+      <span class="platLogo" style="color:#0054a6;">BrightSpace</span>
+      <span class="platLogo" style="color:#333;">Blackboard</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footerGrid">
+        <div class="footerCol">
+          <img src="https://wsrv.nl/?url=https://www.unibe.edu.do/wp-content/themes/unibe/assets/images/logo-unibe-blue-nuevo.svg&w=200" alt="UNIBE" class="footer-logo">
+          <address>
+            Av. Francia No. 129, Gazcue<br>
+            Santo Domingo<br>
+            República Dominicana<br>
+            <a href="tel:8096894111">(809) 689-4111</a>
+          </address>
+          <div class="footerLinks" style="margin-top:15px;">
+            <a href="#">Consumer information</a>
+            <a href="#">Declaración de accesibilidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Políticas de privacidad</a>
+          </div>
+        </div>
+        <div class="footerCol">
+          <h5>Boletín Informativo</h5>
+          <p>Noticias, actividades, eventos y más de la universidad.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Tu correo electrónico">
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        <div class="footerCol" style="text-align:center;">
+          <h5>Acreditaciones</h5>
+          <div style="display:flex;gap:15px;justify-content:center;margin-top:10px;">
+            <div style="width:60px;height:60px;background:#0054a6;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">MESCYT</div>
+            <div style="width:60px;height:60px;background:#00a3e1;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">ADAAC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="underfooter">© UNIBE - 2026. Todos los derechos reservados.</div>
+  </footer>
+
+  <!-- VOICE WIDGET -->
+  <div class="voice-widget" id="voiceWidget" onclick="toggleVoicePanel()">
+    <i class="fas fa-microphone"></i>
+    <div class="tooltip">Asistente de voz UNIBE</div>
+  </div>
+  <div class="voice-panel" id="voicePanel">
+    <div class="voice-panel-header">
+      <h4><i class="fas fa-robot" style="margin-right:8px;"></i> Asistente UNIBE</h4>
+      <button class="close-btn" onclick="toggleVoicePanel()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="voice-panel-body">
+      <div class="mic-area" id="micArea" onclick="toggleListening()">
+        <i class="fas fa-microphone"></i>
+      </div>
+      <p class="status" id="voiceStatus">Toca el micrófono para hablar</p>
+      <div class="suggestions">
+        <p>Prueba diciendo:</p>
+        <span class="chip">"¿Qué carreras ofrecen?"</span>
+        <span class="chip">"Proceso de admisión"</span>
+        <span class="chip">"Horarios de clases"</span>
+        <span class="chip">"Becas disponibles"</span>
+        <span class="chip">"Contactar admisiones"</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Slider
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const track = document.getElementById('sliderTrack');
+    const dotsContainer = document.getElementById('sliderDots');
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    });
+    function goToSlide(n) {
+      currentSlide = n;
+      track.style.transform = 'translateX(-' + (n * 100) + '%)';
+      document.querySelectorAll('.slider-dot').forEach((d, i) => d.classList.toggle('active', i === n));
+    }
+    function moveSlider(dir) {
+      currentSlide = (currentSlide + dir + slides.length) % slides.length;
+      goToSlide(currentSlide);
+    }
+    setInterval(() => moveSlider(1), 5000);
+
+    // News
+    function scrollNews(dir) {
+      document.getElementById('newsGrid').scrollBy({ left: dir * 300, behavior: 'smooth' });
+    }
+
+    // Voice
+    let panelOpen = false, listening = false;
+    function toggleVoicePanel() {
+      panelOpen = !panelOpen;
+      document.getElementById('voicePanel').classList.toggle('active', panelOpen);
+    }
+    function toggleListening() {
+      listening = !listening;
+      document.getElementById('micArea').classList.toggle('listening', listening);
+      document.getElementById('voiceStatus').textContent = listening ? 'Escuchando...' : 'Toca el micrófono para hablar';
+    }
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.getElementById('voiceStatus').textContent = 'Procesando: ' + chip.textContent;
+        document.getElementById('micArea').classList.remove('listening');
+        listening = false;
+        setTimeout(() => {
+          document.getElementById('voiceStatus').textContent = 'Respuesta lista. Toca para preguntar de nuevo.';
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
