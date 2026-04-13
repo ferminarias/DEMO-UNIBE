@@ -734,10 +734,11 @@
 
     // ─────────────────────────────────────────────────────────────
     //  VOICE WIDGET — ElevenLabs Conversational AI
-    //  Configura las constantes antes de activar:
+    //  Las keys viven en las variables de entorno de Vercel.
+    //  El frontend llama a /api/token para obtener un token firmado.
     // ─────────────────────────────────────────────────────────────
-    const ELEVENLABS_AGENT_ID  = 'YOUR_AGENT_ID_HERE';   // ← tu Agent ID de ElevenLabs
-    const ELEVENLABS_TOKEN_URL = '';                       // ← URL endpoint que devuelve el token (opcional si el agente es público)
+    const ELEVENLABS_AGENT_ID  = '';           // dejar vacío — lo provee /api/token
+    const ELEVENLABS_TOKEN_URL = '/api/token'; // endpoint serverless de Vercel
     // ─────────────────────────────────────────────────────────────
 
     let panelOpen    = false;
@@ -833,11 +834,6 @@
 
     // ── Iniciar llamada ──────────────────────────────────────────
     async function startVoiceCall() {
-      if (ELEVENLABS_AGENT_ID === 'YOUR_AGENT_ID_HERE') {
-        addMessage('⚠️ Configura tu ELEVENLABS_AGENT_ID en el código para activar el asistente de voz.', 'assistant');
-        return;
-      }
-
       document.getElementById('voiceMessages').innerHTML = '';
 
       // 1) Solicitar micrófono
@@ -856,20 +852,27 @@
         return;
       }
 
-      // 2) Obtener token (si hay endpoint) o usar agentId público
+      // 2) Obtener token desde /api/token (keys en Vercel env vars)
       setStatus('getting-token', 'Obteniendo token');
       let conversationToken = null;
       let agentId = ELEVENLABS_AGENT_ID;
 
-      if (ELEVENLABS_TOKEN_URL) {
-        try {
-          const res  = await fetch(ELEVENLABS_TOKEN_URL);
-          const data = await res.json();
-          conversationToken = data.token || null;
-          if (data.agentId) agentId = data.agentId;
-        } catch (e) {
-          console.warn('[voice] No se pudo obtener token, usando agentId público:', e);
+      try {
+        const res  = await fetch(ELEVENLABS_TOKEN_URL);
+        const data = await res.json();
+
+        if (!data.configured) {
+          setStatus('error', 'No configurado');
+          addMessage('El asistente de voz aún no está configurado. Contacta al administrador.', 'assistant');
+          return;
         }
+
+        conversationToken = data.token || null;
+        if (data.agentId) agentId = data.agentId;
+      } catch (e) {
+        setStatus('error', 'Error de red');
+        addMessage('No se pudo conectar con el servidor. Intenta de nuevo.', 'assistant');
+        return;
       }
 
       // 3) Conectar WebRTC con ElevenLabs
