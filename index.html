@@ -262,52 +262,128 @@
     }
     .voice-widget:hover .tooltip { opacity: 1; transform: translateY(0); }
 
+    /* Panel principal */
     .voice-panel {
       position: fixed; bottom: 100px; right: 25px; z-index: 9998;
-      width: 360px; background: #fff; border-radius: 16px;
+      width: 370px; background: #fff; border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;
       display: none; animation: slideUp 0.3s ease;
+      flex-direction: column; max-height: 600px;
     }
-    .voice-panel.active { display: block; }
+    .voice-panel.active { display: flex; }
     .voice-panel-header {
       background: linear-gradient(135deg, #0054a6, #00a3e1);
-      color: #fff; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+      color: #fff; padding: 16px 20px; display: flex; align-items: center;
+      justify-content: space-between; flex-shrink: 0;
     }
-    .voice-panel-header h4 { font-size: 15px; font-weight: 700; }
+    .voice-panel-header .header-left { display: flex; align-items: center; gap: 10px; }
+    .voice-panel-header h4 { font-size: 15px; font-weight: 700; margin: 0; }
+    .voice-panel-header .header-subtitle { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+    .voice-status-dot {
+      width: 10px; height: 10px; border-radius: 50%; background: #aaa; flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .voice-status-dot.idle { background: #94a3b8; }
+    .voice-status-dot.connecting { background: #fbbf24; animation: blink 1s infinite; }
+    .voice-status-dot.connected { background: #22c55e; }
+    .voice-status-dot.error { background: #ef4444; }
     .voice-panel-header .close-btn {
       background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; opacity: 0.8;
     }
     .voice-panel-header .close-btn:hover { opacity: 1; }
-    .voice-panel-body { padding: 25px 20px; text-align: center; }
-    .mic-area {
-      width: 90px; height: 90px; border-radius: 50%;
+
+    /* Mensajes */
+    .voice-messages {
+      flex: 1; overflow-y: auto; padding: 16px; display: flex;
+      flex-direction: column; gap: 10px; min-height: 180px; max-height: 300px;
+      background: #f8fafc;
+    }
+    .voice-messages:empty::after {
+      content: 'La conversación aparecerá aquí...';
+      color: #94a3b8; font-size: 13px; text-align: center;
+      display: block; margin: auto;
+    }
+    .vm-bubble {
+      max-width: 85%; padding: 10px 14px; border-radius: 12px;
+      font-size: 13px; line-height: 1.45; word-break: break-word;
+    }
+    .vm-bubble.user {
+      align-self: flex-end; background: #0054a6; color: #fff; border-bottom-right-radius: 4px;
+    }
+    .vm-bubble.assistant {
+      align-self: flex-start; background: #fff; color: #333;
+      border: 1px solid #e2e8f0; border-bottom-left-radius: 4px;
+    }
+    .vm-time { font-size: 10px; margin-top: 4px; opacity: 0.65; }
+    .vm-typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; }
+    .vm-typing span {
+      width: 7px; height: 7px; border-radius: 50%; background: #94a3b8;
+      animation: bounce-dot 1.2s infinite;
+    }
+    .vm-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .vm-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    /* Input de texto */
+    .voice-text-input {
+      display: none; padding: 12px 14px; border-top: 1px solid #e2e8f0;
+      gap: 8px; background: #fff; flex-shrink: 0;
+    }
+    .voice-text-input.visible { display: flex; }
+    .voice-text-input input {
+      flex: 1; border: 1px solid #d1d5db; border-radius: 8px;
+      padding: 8px 12px; font-size: 14px; font-family: 'Lato', sans-serif;
+      outline: none; color: #333;
+    }
+    .voice-text-input input:focus { border-color: #0054a6; }
+    .voice-text-input button {
+      background: #0054a6; color: #fff; border: none; border-radius: 8px;
+      padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
+      white-space: nowrap;
+    }
+    .voice-text-input button:disabled { opacity: 0.5; cursor: default; }
+
+    /* Controles */
+    .voice-controls {
+      padding: 16px 20px; border-top: 1px solid #e2e8f0;
+      background: #f8fafc; flex-shrink: 0;
+    }
+    .voice-controls-row {
+      display: flex; align-items: center; gap: 10px; justify-content: center;
+    }
+    .vc-status-text { font-size: 12px; color: #64748b; text-align: center; margin-bottom: 12px; }
+    .vc-btn {
+      border: none; border-radius: 50%; width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 20px; transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .vc-btn:disabled { opacity: 0.4; cursor: default; }
+    .vc-btn-call {
       background: linear-gradient(135deg, #0054a6, #00a3e1);
-      margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.3s;
+      color: #fff; width: 62px; height: 62px; font-size: 24px;
+      box-shadow: 0 4px 16px rgba(0,84,166,0.35);
     }
-    .mic-area.listening { animation: pulse-mic 1.5s infinite; }
-    .mic-area i { font-size: 32px; color: #fff; }
-    .status { font-size: 14px; color: #666; margin-bottom: 15px; }
-    .suggestions { text-align: left; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; }
-    .suggestions p { font-size: 12px; color: #999; margin-bottom: 8px; text-transform: uppercase; font-weight: 700; }
-    .chip {
-      display: inline-block; background: #f0f7ff; color: #0054a6;
-      padding: 6px 14px; border-radius: 20px; font-size: 12px;
-      margin: 3px 4px; cursor: pointer; transition: background 0.2s;
-    }
-    .chip:hover { background: #d8ecff; }
+    .vc-btn-call:hover:not(:disabled) { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,84,166,0.5); }
+    .vc-btn-call.active { background: linear-gradient(135deg, #dc2626, #ef4444); }
+    .vc-btn-call.active:hover:not(:disabled) { box-shadow: 0 6px 20px rgba(220,38,38,0.5); }
+    .vc-btn-mute { background: #e2e8f0; color: #475569; }
+    .vc-btn-mute:hover:not(:disabled) { background: #cbd5e1; }
+    .vc-btn-mute.muted { background: #fef2f2; color: #dc2626; }
 
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 4px 20px rgba(0,84,166,0.4); }
       50% { box-shadow: 0 4px 30px rgba(0,84,166,0.6), 0 0 0 8px rgba(0,84,166,0.1); }
     }
-    @keyframes pulse-mic {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(0,84,166,0.4); }
-      50% { box-shadow: 0 0 0 15px rgba(0,84,166,0); }
-    }
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+    @keyframes bounce-dot {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-5px); }
     }
 
     @media (max-width: 992px) {
@@ -320,7 +396,7 @@
       .mainSlider { height: 300px; }
       .eventsGrid { flex-direction: column; align-items: center; }
       .footerGrid { flex-direction: column; }
-      .voice-panel { width: calc(100% - 30px); right: 15px; }
+      .voice-panel { width: calc(100vw - 30px); right: 15px; max-height: 85vh; }
     }
   </style>
 </head>
@@ -584,26 +660,46 @@
 
   <!-- VOICE WIDGET -->
   <div class="voice-widget" id="voiceWidget" onclick="toggleVoicePanel()">
-    <i class="fas fa-microphone"></i>
+    <i class="fas fa-headset"></i>
     <div class="tooltip">Asistente de voz UNIBE</div>
   </div>
+
   <div class="voice-panel" id="voicePanel">
+    <!-- Header -->
     <div class="voice-panel-header">
-      <h4><i class="fas fa-robot" style="margin-right:8px;"></i> Asistente UNIBE</h4>
-      <button class="close-btn" onclick="toggleVoicePanel()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="voice-panel-body">
-      <div class="mic-area" id="micArea" onclick="toggleListening()">
-        <i class="fas fa-microphone"></i>
+      <div class="header-left">
+        <div>
+          <h4><i class="fas fa-robot" style="margin-right:6px;"></i> Asistente UNIBE</h4>
+          <div class="header-subtitle">Conversación por voz en tiempo real</div>
+        </div>
       </div>
-      <p class="status" id="voiceStatus">Toca el micrófono para hablar</p>
-      <div class="suggestions">
-        <p>Prueba diciendo:</p>
-        <span class="chip">"¿Qué carreras ofrecen?"</span>
-        <span class="chip">"Proceso de admisión"</span>
-        <span class="chip">"Horarios de clases"</span>
-        <span class="chip">"Becas disponibles"</span>
-        <span class="chip">"Contactar admisiones"</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="voice-status-dot idle" id="statusDot"></div>
+        <span id="statusLabel" style="font-size:11px;opacity:0.9;">Inactivo</span>
+        <button class="close-btn" onclick="toggleVoicePanel()"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="voice-messages" id="voiceMessages" role="log" aria-live="polite"></div>
+
+    <!-- Input de texto (visible cuando conectado) -->
+    <div class="voice-text-input" id="voiceTextInput">
+      <input type="text" id="voiceTextMsg" placeholder="Escribe tu mensaje..." autocomplete="off">
+      <button id="voiceSendBtn" onclick="sendTextMessage()">Enviar</button>
+    </div>
+
+    <!-- Controles -->
+    <div class="voice-controls">
+      <div class="vc-status-text" id="vcStatusText">Presiona el botón para iniciar la llamada</div>
+      <div class="voice-controls-row">
+        <button class="vc-btn vc-btn-mute" id="muteBtn" onclick="toggleMute()" disabled title="Silenciar micrófono">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <button class="vc-btn vc-btn-call" id="callBtn" onclick="handleCallBtn()">
+          <i class="fas fa-phone" id="callIcon"></i>
+        </button>
+        <div style="width:52px;"></div><!-- spacer -->
       </div>
     </div>
   </div>
@@ -636,27 +732,277 @@
       document.getElementById('newsGrid').scrollBy({ left: dir * 300, behavior: 'smooth' });
     }
 
-    // Voice
-    let panelOpen = false, listening = false;
+    // ─────────────────────────────────────────────────────────────
+    //  VOICE WIDGET — ElevenLabs Conversational AI
+    //  Configura las constantes antes de activar:
+    // ─────────────────────────────────────────────────────────────
+    const ELEVENLABS_AGENT_ID  = 'YOUR_AGENT_ID_HERE';   // ← tu Agent ID de ElevenLabs
+    const ELEVENLABS_TOKEN_URL = '';                       // ← URL endpoint que devuelve el token (opcional si el agente es público)
+    // ─────────────────────────────────────────────────────────────
+
+    let panelOpen    = false;
+    let voiceSession = null;      // instancia de Conversation
+    let mediaStream  = null;      // MediaStream del micrófono
+    let sessionAlive = false;
+    let isMuted      = false;
+    let voiceStatus  = 'idle';    // idle | asking-mic | getting-token | connecting | connected | error
+
+    // ── Abrir/cerrar panel ──────────────────────────────────────
     function toggleVoicePanel() {
       panelOpen = !panelOpen;
       document.getElementById('voicePanel').classList.toggle('active', panelOpen);
     }
-    function toggleListening() {
-      listening = !listening;
-      document.getElementById('micArea').classList.toggle('listening', listening);
-      document.getElementById('voiceStatus').textContent = listening ? 'Escuchando...' : 'Toca el micrófono para hablar';
+
+    // ── Gestión de estado visual ─────────────────────────────────
+    function setStatus(st, label) {
+      voiceStatus = st;
+      const dot  = document.getElementById('statusDot');
+      const lbl  = document.getElementById('statusLabel');
+      const txt  = document.getElementById('vcStatusText');
+      const callBtn  = document.getElementById('callBtn');
+      const callIcon = document.getElementById('callIcon');
+      const muteBtn  = document.getElementById('muteBtn');
+      const textInput = document.getElementById('voiceTextInput');
+
+      dot.className = 'voice-status-dot ' + st;
+      lbl.textContent = label;
+
+      const busy = st === 'asking-mic' || st === 'getting-token' || st === 'connecting';
+
+      if (st === 'connected') {
+        callBtn.classList.add('active');
+        callIcon.className = 'fas fa-phone-slash';
+        muteBtn.disabled = false;
+        textInput.classList.add('visible');
+        txt.textContent = 'Llamada en curso — habla o escribe';
+      } else {
+        callBtn.classList.remove('active');
+        callIcon.className = 'fas fa-phone';
+        muteBtn.disabled = true;
+        textInput.classList.remove('visible');
+        if (busy) {
+          callBtn.disabled = true;
+          txt.textContent = label + '...';
+        } else {
+          callBtn.disabled = false;
+          txt.textContent = st === 'error'
+            ? 'Error de conexión. Intenta de nuevo.'
+            : 'Presiona el botón para iniciar la llamada';
+        }
+      }
     }
-    document.querySelectorAll('.chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        document.getElementById('voiceStatus').textContent = 'Procesando: ' + chip.textContent;
-        document.getElementById('micArea').classList.remove('listening');
-        listening = false;
-        setTimeout(() => {
-          document.getElementById('voiceStatus').textContent = 'Respuesta lista. Toca para preguntar de nuevo.';
-        }, 2000);
-      });
+
+    // ── Añadir burbuja de mensaje ─────────────────────────────────
+    function addMessage(text, type) {
+      const box  = document.getElementById('voiceMessages');
+      const wrap = document.createElement('div');
+      wrap.className = 'vm-bubble ' + type;
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      wrap.innerHTML = '<div>' + escapeHtml(text) + '</div><div class="vm-time">' + time + '</div>';
+      box.appendChild(wrap);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function showTyping() {
+      const box = document.getElementById('voiceMessages');
+      const t = document.createElement('div');
+      t.className = 'vm-bubble assistant vm-typing';
+      t.id = 'typingIndicator';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      box.appendChild(t);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function hideTyping() {
+      const t = document.getElementById('typingIndicator');
+      if (t) t.remove();
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // ── Botón principal: llamar / colgar ─────────────────────────
+    function handleCallBtn() {
+      if (voiceStatus === 'connected') {
+        stopVoiceCall();
+      } else {
+        startVoiceCall();
+      }
+    }
+
+    // ── Iniciar llamada ──────────────────────────────────────────
+    async function startVoiceCall() {
+      if (ELEVENLABS_AGENT_ID === 'YOUR_AGENT_ID_HERE') {
+        addMessage('⚠️ Configura tu ELEVENLABS_AGENT_ID en el código para activar el asistente de voz.', 'assistant');
+        return;
+      }
+
+      document.getElementById('voiceMessages').innerHTML = '';
+
+      // 1) Solicitar micrófono
+      setStatus('asking-mic', 'Solicitando micrófono');
+      try {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(t => t.stop());
+          mediaStream = null;
+        }
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+        });
+      } catch (e) {
+        setStatus('error', 'Sin micrófono');
+        addMessage('Necesito acceso al micrófono para conversar contigo. Por favor permite el acceso e intenta de nuevo.', 'assistant');
+        return;
+      }
+
+      // 2) Obtener token (si hay endpoint) o usar agentId público
+      setStatus('getting-token', 'Obteniendo token');
+      let conversationToken = null;
+      let agentId = ELEVENLABS_AGENT_ID;
+
+      if (ELEVENLABS_TOKEN_URL) {
+        try {
+          const res  = await fetch(ELEVENLABS_TOKEN_URL);
+          const data = await res.json();
+          conversationToken = data.token || null;
+          if (data.agentId) agentId = data.agentId;
+        } catch (e) {
+          console.warn('[voice] No se pudo obtener token, usando agentId público:', e);
+        }
+      }
+
+      // 3) Conectar WebRTC con ElevenLabs
+      setStatus('connecting', 'Conectando');
+      try {
+        const { Conversation } = await import('https://cdn.jsdelivr.net/npm/@elevenlabs/client@latest/+esm');
+
+        const sessionParams = {
+          agentId,
+          connectionType: 'webrtc',
+          onConnect: () => {
+            sessionAlive = true;
+            setStatus('connected', 'Conectado');
+          },
+          onDisconnect: () => {
+            sessionAlive = false;
+            setStatus('idle', 'Inactivo');
+          },
+          onMessage: (msg) => {
+            if (!sessionAlive) return;
+            hideTyping();
+
+            let text = msg.message || msg.text || msg.content || (typeof msg === 'string' ? msg : null);
+            let type = (msg.source === 'user' || msg.type === 'user' || msg.role === 'user') ? 'user' : 'assistant';
+
+            if (text && text.trim()) {
+              addMessage(text.trim(), type);
+            }
+          },
+          onError: (err) => {
+            console.error('[voice] error:', err);
+            sessionAlive = false;
+            setStatus('error', 'Error');
+            addMessage('Error de conexión. La llamada se terminó. Intenta de nuevo.', 'assistant');
+          },
+          onStatusChange: (s) => console.log('[voice] status:', s),
+          onModeChange:   (m) => {
+            if (m === 'speaking') showTyping();
+            else hideTyping();
+          },
+        };
+
+        if (conversationToken) sessionParams.conversationToken = conversationToken;
+
+        voiceSession = await Conversation.startSession(sessionParams);
+      } catch (e) {
+        console.error('[voice] SDK error:', e);
+        setStatus('error', 'Error');
+        addMessage('No se pudo iniciar la conversación por voz. Verifica tu Agent ID y vuelve a intentar.', 'assistant');
+      }
+    }
+
+    // ── Terminar llamada ─────────────────────────────────────────
+    function stopVoiceCall() {
+      sessionAlive = false;
+      try {
+        if (voiceSession) {
+          voiceSession.endSession?.();
+          voiceSession.disconnect?.();
+          voiceSession = null;
+        }
+      } catch (e) { console.error('[voice] stop error:', e); }
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
+      }
+      isMuted = false;
+      updateMuteBtn();
+      setStatus('idle', 'Inactivo');
+      addMessage('Llamada finalizada.', 'assistant');
+    }
+
+    // ── Silenciar / activar micrófono ────────────────────────────
+    function toggleMute() {
+      if (!voiceSession) return;
+      isMuted = !isMuted;
+      try {
+        voiceSession.conversation?.setMicMuted(isMuted);
+      } catch (e) { console.error('[voice] mute error:', e); }
+      updateMuteBtn();
+    }
+
+    function updateMuteBtn() {
+      const btn  = document.getElementById('muteBtn');
+      const icon = btn.querySelector('i');
+      if (isMuted) {
+        btn.classList.add('muted');
+        icon.className = 'fas fa-microphone-slash';
+        btn.title = 'Activar micrófono';
+      } else {
+        btn.classList.remove('muted');
+        icon.className = 'fas fa-microphone';
+        btn.title = 'Silenciar micrófono';
+      }
+    }
+
+    // ── Enviar mensaje de texto ──────────────────────────────────
+    function sendTextMessage() {
+      const input = document.getElementById('voiceTextMsg');
+      const text  = input.value.trim();
+      if (!text) return;
+      input.value = '';
+
+      addMessage(text, 'user');
+
+      if (!voiceSession) return;
+
+      // Intentar enviar vía SDK
+      try {
+        if (typeof voiceSession.conversation?.sendUserMessage === 'function') {
+          voiceSession.conversation.sendUserActivity?.();
+          voiceSession.conversation.sendUserMessage(text);
+          return;
+        }
+      } catch (e) { console.error('[voice] sendUserMessage error:', e); }
+
+      // Fallback WebSocket
+      try {
+        const ws = voiceSession._ws || voiceSession.conversation?._ws;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'user_message', text }));
+          return;
+        }
+      } catch (e) { console.error('[voice] ws send error:', e); }
+    }
+
+    // Enviar texto con Enter
+    document.getElementById('voiceTextMsg').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendTextMessage(); }
     });
+
+    // Cleanup al cerrar la ventana
+    window.addEventListener('beforeunload', () => { if (voiceSession) stopVoiceCall(); });
   </script>
 </body>
 </html>
