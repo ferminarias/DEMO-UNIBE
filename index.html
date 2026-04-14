@@ -241,7 +241,7 @@
 
     /* VOICE WIDGET */
     .voice-widget {
-      position: fixed; bottom: 25px; right: 25px; z-index: 9999;
+      position: fixed; bottom: 95px; right: 25px; z-index: 9999;
       width: 65px; height: 65px; border-radius: 50%;
       background: linear-gradient(135deg, #0054a6, #00a3e1);
       color: #fff; display: flex; align-items: center; justify-content: center;
@@ -264,7 +264,7 @@
 
     /* Panel principal */
     .voice-panel {
-      position: fixed; bottom: 100px; right: 25px; z-index: 9998;
+      position: fixed; bottom: 170px; right: 25px; z-index: 9998;
       width: 370px; background: #fff; border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;
       display: none; animation: slideUp 0.3s ease;
@@ -657,6 +657,18 @@
     </div>
     <div class="underfooter">© UNIBE - 2026. Todos los derechos reservados.</div>
   </footer>
+
+  <!-- START Botmaker Webchat-->
+  <script>
+    (function () {
+        let js = document.createElement('script');
+        js.type = 'text/javascript';
+        js.async = 1;
+        js.src = 'https://go.botmaker.com/rest/webchat/p/PQ423O0QYS/init.js';
+        document.body.appendChild(js);
+    })();
+  </script>
+  <!-- END Botmaker Webchat-->
 
   <!-- VOICE WIDGET -->
   <div class="voice-widget" id="voiceWidget" onclick="toggleVoicePanel()">
